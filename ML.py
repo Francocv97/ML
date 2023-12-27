@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import gzip
 import json
+import os
 
 app = FastAPI()
 
@@ -17,15 +18,15 @@ lista = []
 with gzip.open(archivo, 'r') as file:
     data = file.read().decode('utf-8')
     if data[0] == '[':
-            # Los datos están en formato de array
-            lista = json.loads(data)
+        # Los datos están en formato de array
+        lista = json.loads(data)
     else:
-            # Los datos están separados por nuevas líneas
-            for line in data.splitlines():
-                lista.append(json.loads(line))
+        # Los datos están separados por nuevas líneas
+        for line in data.splitlines():
+            lista.append(json.loads(line))
 
-    # Crear un DataFrame a partir de la lista
-    df1 = pd.DataFrame(lista)
+# Crear un DataFrame a partir de la lista
+df1 = pd.DataFrame(lista)
 
 # Elimina las filas con valores NaN en la columna de juegos
 df1 = df1.dropna(subset=['title'])
@@ -99,6 +100,17 @@ def get_recomendacion_usuario(user_id: str):
         return {"Juegos recomendados para el usuario {}: {}".format(user_id, list(juegos_recomendados))}
     else:
         return {"error": "El ID de usuario {} no se encuentra en los datos.".format(user_id)}
-    
+
+# Configuración del PATH para uvicorn
+if __name__ == "__main__":
+    # Agrega el directorio al PATH si no está presente
+    path_to_uvicorn = '/opt/render/.local/bin'
+    if path_to_uvicorn not in os.environ['PATH']:
+        os.environ['PATH'] = f"{path_to_uvicorn}:{os.environ['PATH']}"
+
+    # Lanza la aplicación con uvicorn
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=10000)
+
 
     # uvicorn ML:app --reload
