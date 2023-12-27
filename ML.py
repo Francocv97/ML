@@ -99,3 +99,6 @@ def get_recomendacion_usuario(user_id: str):
         return {"Juegos recomendados para el usuario {}: {}".format(user_id, list(juegos_recomendados))}
     else:
         return {"error": "El ID de usuario {} no se encuentra en los datos.".format(user_id)}
+    
+
+    # uvicorn ML:app --reload

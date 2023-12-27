@@ -1,7 +1,5 @@
 fastapi
-uvicorn
 scikit-learn
 pandas
 numpy
-nest_asyncio
-httpx
+uvicorn
