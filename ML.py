@@ -6,6 +6,7 @@ import numpy as np
 import gzip
 import json
 import os
+import platform
 
 app = FastAPI()
 
@@ -108,9 +109,11 @@ if __name__ == "__main__":
     if path_to_uvicorn not in os.environ['PATH']:
         os.environ['PATH'] = f"{path_to_uvicorn}:{os.environ['PATH']}"
 
+    # Añade esto al principio para imprimir información sobre el entorno
+    print(f"Python version: {platform.python_version()}, Platform: {platform.platform()}")
+
     # Lanza la aplicación con uvicorn
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=10001)
-
 
     # uvicorn ML:app --reload
